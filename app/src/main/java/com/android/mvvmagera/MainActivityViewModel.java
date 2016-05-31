@@ -52,7 +52,21 @@ public class MainActivityViewModel extends BaseObservable implements Receiver<Bi
         }
     }
 
-    public Repository<Result<Bitmap>> downloadImageByDisplayMetrics(String url, DisplayMetrics displayMetrics) {
+    public void addUpdatable() {
+        // Start listening to the repository, triggering the flow
+        if (mBackground != null) {
+            mBackground.addUpdatable(this);
+        }
+    }
+
+    public void removeUpdatable() {
+        // Stop listening to the repository, deactivating it
+        if (mBackground != null) {
+            mBackground.removeUpdatable(this);
+        }
+    }
+
+    public void downloadImageByDisplayMetrics(String url, DisplayMetrics displayMetrics) {
 
         int size = Math.max(displayMetrics.heightPixels,
                 displayMetrics.widthPixels);
@@ -72,8 +86,6 @@ public class MainActivityViewModel extends BaseObservable implements Receiver<Bi
                 .thenTransform(getTransformHttpResponse()) // Decode the response to the result of a     bitmap, absent on failure
                 .onDeactivation(RepositoryConfig.SEND_INTERRUPT) // Interrupt thread on deactivation
                 .compile(); // Create the repository
-
-        return mBackground;
     }
 
     private Supplier<HttpRequest> getHttpRequestSupplier(final String url) {

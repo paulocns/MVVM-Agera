@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import com.android.mvvmagera.databinding.ActivityMainBinding;
-import com.google.android.agera.Repository;
-import com.google.android.agera.Result;
 
 public class MainActivity extends AppCompatActivity implements MainActivityViewModel.UpdateImageListener {
 
@@ -17,36 +15,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewM
 
     private ActivityMainBinding mDataBinding;
 
-    private Repository<Result<Bitmap>> mDownloadRepository;
     private MainActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         mViewModel = new MainActivityViewModel(this);
         mDataBinding.setViewModel(mViewModel);
 
-        mDownloadRepository = mViewModel.downloadImageByDisplayMetrics(BACKGROUND_BASE_URL, getResources().getDisplayMetrics());
+        mViewModel.downloadImageByDisplayMetrics(BACKGROUND_BASE_URL, getResources().getDisplayMetrics());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Start listening to the repository, triggering the flow
-        if (mDownloadRepository != null && mViewModel != null) {
-            mDownloadRepository.addUpdatable(mViewModel);
+        if (mViewModel != null) {
+            mViewModel.addUpdatable();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // Stop listening to the repository, deactivating it
-        if (mDownloadRepository != null && mViewModel != null) {
-            mDownloadRepository.removeUpdatable(mViewModel);
+        if (mViewModel != null) {
+            mViewModel.removeUpdatable();
         }
     }
 

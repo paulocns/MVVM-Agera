@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.android.mvvmagera.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements MainActivityViewModel.UpdateImageListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String BACKGROUND_BASE_URL =
             "http://www.gravatar.com/avatar/4df6f4fe5976df17deeea19443d4429d?s=";
@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewM
 
         mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        mViewModel = new MainActivityViewModel(this);
+        mViewModel = new MainActivityViewModel();
         mDataBinding.setViewModel(mViewModel);
 
         mViewModel.downloadImageByDisplayMetrics(BACKGROUND_BASE_URL, getResources().getDisplayMetrics());
@@ -43,10 +43,5 @@ public class MainActivity extends AppCompatActivity implements MainActivityViewM
         if (mViewModel != null) {
             mViewModel.removeUpdatable();
         }
-    }
-
-    @Override
-    public void onUpdateImage(@NonNull Bitmap bitmap) {
-        mDataBinding.imageView.setImageBitmap(bitmap);
     }
 }

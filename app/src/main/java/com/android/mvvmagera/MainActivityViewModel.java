@@ -34,10 +34,9 @@ public class MainActivityViewModel extends BaseObservable implements Receiver<Bi
     private boolean mIsLoading = false;
 
     private Repository<Result<Bitmap>> mBackground;
-    private UpdateImageListener mListener;
+    private Bitmap mBitmap;
 
-    public MainActivityViewModel(@NonNull UpdateImageListener listener) {
-        mListener = listener;
+    public MainActivityViewModel() {
     }
 
     @Bindable
@@ -122,10 +121,18 @@ public class MainActivityViewModel extends BaseObservable implements Receiver<Bi
 
         setLoading(false);
         // Set the background bitmap to the background view
-        mListener.onUpdateImage(background);
+        setBitmap(background);
     }
 
-    public interface UpdateImageListener {
-        void onUpdateImage(@NonNull Bitmap bitmap);
+    @Bindable
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        if (!bitmap.equals(mBitmap)) {
+            mBitmap = bitmap;
+            notifyPropertyChanged(com.android.mvvmagera.BR.bitmap);
+        }
     }
 }
